@@ -1,0 +1,63 @@
+K1-programm ::= "program" procedure+  main "end"
+
+main ::= "main" proc-name
+
+procedure ::= "procedure" proc-name parameter declaration controlflow* "end"
+
+proc-name ::= identifier
+
+parameter ::= "parameter" p-var* "end"
+
+p-var ::= var-name ("integer" | "string") ("in" | "out" | "inout")
+
+var-name ::= identifier
+
+declaration ::= "declaration" var* "end"
+
+var ::= var-name ("integer" | "string")
+
+controlflow ::= (statement | loop | "exitloop" | case)
+
+statement ::= (print-stmt | input-stmt | assign-stmt | integer-operation | string-operation | call-stmt)
+
+print-stmt ::= "print" local-var
+
+input-stmt ::= "input" prompt local-var
+
+assign-stmt ::= "set" result-var operand
+
+local-var ::= identifier
+
+integer-operation ::= integer-operator result-var operand1 operand2
+
+string-operation ::= string-operator result-var operand1 operand2
+
+integer-operator ::= ("add" | "sub")
+
+string-operator ::= "concat"
+
+result-var ::= identifier
+
+call-stmt ::= "call" proc-name "(" actualparameter ")"
+
+actualparameter ::= local-var*
+
+loop ::= "loop"  controlflow* "end"
+
+case ::= "case" when+ otherwise? "end"
+
+when ::= "when" expression controlflow*
+
+otherwise ::= "otherwise" controlflow*
+
+expression ::= log-operator operand1 operand2
+
+log-operator ::= ("less" | "equal" | "greater" )
+
+operand1 ::= operand
+
+operand2 ::= operand
+
+operand ::= (identifier | constant)
+
+identifier ::= character (character | digit)+
