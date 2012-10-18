@@ -1,0 +1,39 @@
+program
+	procedure proc2
+		parameter
+			FWert1 integer in
+			Ergebnis integer out
+		end
+		declaration
+			Zaehler integer
+		end
+		set Zaehler 1
+		set Ergebnis 0
+		loop
+			case
+			when equal Zaehler FWert1
+				exitloop
+			end
+
+			# Ergebnis und Zaehler addieren, Resultat in Ergebnis speichern
+			add Ergebnis Ergebnis Zaehler
+
+			# Zaehler um 1 erhoehen
+			add Zaehler Zaehler 1
+			end
+	end
+	procedure proc1
+		parameter
+		end
+		declaration
+			Anzahl integer
+			Summe integer
+		end
+		input "Anzahl = " Anzahl
+		call proc2 (Anzahl Summe)
+		print "berechnete Summe:"
+		print Summe
+	end
+	# Startpunkt definieren
+	main proc1
+end
