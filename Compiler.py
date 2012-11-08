@@ -1,73 +1,47 @@
 #!/usr/bin/python
+
 import re
-def main(scanner,token): return "MAIN"
+
+def tokenizer(scanner,token): return token.upper(),token
 def identifier(scanner,token): return "IDENTIFIER", token
-def program(scanner,token): return "PROGRAM"
-def procedure(scanner,token): return "PROCEDURE"
-def end(scanner,token): return "END"
-def comment(scanner,token): return "COMMENT", token
-def parameter(scanner,token): return "PARAMETER"
-def integer(scanner,token): return "INTEGER"
-def string(scanner,token): return "STRING"
-def in_lex(scanner, token): return "IN"
-def out_lex(scanner, token): return "OUT"
-def inout(scanner, token): return "INOUT"
-def declaration(scanner, token): return "DECLARATION"
-def exitloop(scanner, token): return "EXITLOOP"
-def print_lex(scanner, token): return "PRINT"
-def input_lex(scanner, token): return "INPUT"
-def set_lex(scanner, token): return "SET"
-def add(scanner, token): return "ADD"
-def sub(scanner, token): return "SUB"
-def concat(scanner, token): return "CONCAT"
-def call(scanner, token): return "CALL"
-def langle(scanner, token): return "("
-def rangle(scanner, token): return ")"
-def loop(scanner, token): return "LOOP"
-def case(scanner, token): return "CASE"
-def when(scanner, token): return "WHEN"
-def otherwise(scanner, token): return "OTHERWISE"
-def less(scanner, token): return "LESS"
-def equal(scanner, token): return "EQUAL"
-def greater(scanner, token): return "GREATER"
 def constant(scanner, token): return "CONSTANT", token
 def digit(scanner, token): return "DIGIT", token
 
 
 scanner = re.Scanner([
-    (r"main", main),
-    (r"procedure", procedure),
-    (r"program", program),
-    (r"end", end),
-    (r"#.*", comment),
-    (r"parameter", parameter),
-    (r"integer", integer),
-    (r"string", string),
-    (r"input", input_lex),
-    (r"inout", inout),
-    (r"in", in_lex),
-    (r"out", out_lex),
-    (r"declaration", declaration),
-    (r"exitloop", exitloop),
-    (r"print", print_lex),
-    (r"set", set_lex),
-    (r"add", add),
-    (r"sub", sub),
-    (r"conctat", concat),
-    (r"call",call),
-    (r"[(]", langle),
-    (r"[)]", rangle),
-    (r"loop",loop),
-    (r"case", case),
-    (r"when", when),
-    (r"otherwise", otherwise),
-    (r"less", less),
-    (r"equal", equal),
-    (r"greater",greater),
+    (r"main\b", tokenizer),
+    (r"procedure\b", tokenizer),
+    (r"program\b", tokenizer),
+    (r"end\b", tokenizer),
+    (r"#.*", None),
+    (r"parameter\b", tokenizer),
+    (r"integer\b", tokenizer),
+    (r"string\b", tokenizer),
+    (r"input\b", tokenizer),
+    (r"inout\b", tokenizer),
+    (r"in\b", tokenizer),
+    (r"out\b", tokenizer),
+    (r"declaration\b", tokenizer),
+    (r"exitloop\b", tokenizer),
+    (r"print\b", tokenizer),
+    (r"set\b", tokenizer),
+    (r"add\b", tokenizer),
+    (r"sub\b", tokenizer),
+    (r"conctat\b", tokenizer),
+    (r"call\b",tokenizer),
+    (r"[(]", tokenizer),
+    (r"[)]$", tokenizer),
+    (r"loop\b",tokenizer),
+    (r"case\b", tokenizer),
+    (r"when\b", tokenizer),
+    (r"otherwise\b", tokenizer),
+    (r"less\b", tokenizer),
+    (r"equal\b", tokenizer),
+    (r"greater\b",tokenizer),
     (r'["].*["]',constant),
     (r"[0-9]+", digit),
-    (r"\s",None),
     (r"[A-Za-z][A-Za-z0-9]+", identifier),
+    (r"\s",None),
     ])
 tokens = []
 remainders = ""
@@ -76,10 +50,16 @@ file_input = f.read()
 file_input = str(file_input.replace("\t",""))
 file_input = file_input.splitlines();
 
+count =0
+
 for line in file_input:
+    count+=1
     line = line.strip()
     tokenline, remainder = scanner.scan(line)
-    remainders+=remainder
+   
+    if(remainder !=""):
+        print("Unknown sequence in line "+str(count)+" :"+line)
+        exit(0)
     for token in tokenline:
         tokens.append(token)
 
