@@ -1,11 +1,23 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 import re
 
-def tokenizer(scanner,token): return token.upper(),token
-def identifier(scanner,token): return "IDENTIFIER", token
-def constant(scanner, token): return "CONSTANT", token
-def digit(scanner, token): return "DIGIT", token
+
+def tokenizer(scanner, token):
+    return (token.upper(), token)
+
+
+def identifier(scanner, token):
+    return ('IDENTIFIER', token)
+
+
+def constant(scanner, token):
+    return ('CONSTANT', token)
+
+
+def digit(scanner, token):
+    return ('DIGIT', token)
 
 
 scanner = re.Scanner([
@@ -28,38 +40,42 @@ scanner = re.Scanner([
     (r"add\b", tokenizer),
     (r"sub\b", tokenizer),
     (r"conctat\b", tokenizer),
-    (r"call\b",tokenizer),
+    (r"call\b", tokenizer),
     (r"[(]", tokenizer),
     (r"[)]$", tokenizer),
-    (r"loop\b",tokenizer),
+    (r"loop\b", tokenizer),
     (r"case\b", tokenizer),
     (r"when\b", tokenizer),
     (r"otherwise\b", tokenizer),
     (r"less\b", tokenizer),
     (r"equal\b", tokenizer),
-    (r"greater\b",tokenizer),
-    (r'["].*["]',constant),
+    (r"greater\b", tokenizer),
+    (r'["].*["]', constant),
     (r"[0-9]+", digit),
     (r"[A-Za-z][A-Za-z0-9]+", identifier),
-    (r"\s",None),
+    (r"\s", None),
     ])
 
-def lex(file_input):
+
+def lexical_analyze(file_input):
     tokens = []
-    remainders = ""
-    file_input = str(file_input.replace("\t",""))
-    file_input = file_input.splitlines();
+    remainders = ''
+
+    file_input = str(file_input.replace('\t', ''))
+    file_input = file_input.splitlines()
     for line in file_input:
         line = line.strip()
-        tokenline, remainder = scanner.scan(line)
-       
-        if(remainder !=""):
-            print("Unknown sequence in line "+str(count)+" :"+line)
+        (tokenline, remainder) = scanner.scan(line)
+
+        if remainder != '':
+            print 'Unknown sequence in line: ' + line
             exit(0)
         for token in tokenline:
             tokens.append(token)
 
-    for token in tokens:
-        print token
+    # for token in tokens:
+    #    print token
 
-    print remainders
+    # print remainders
+
+    return tokens
