@@ -11,7 +11,7 @@ def pop(tokens):
 
 def main_token(tokens):
     tokens = pop(tokens)
-    if tokens[0][0] == 'Identifier':
+    if tokens[0][0] == 'IDENTIFIER':
         tokens = proc_name_token(tokens)
     else:
         print 'Unknown token: ' + tokens[0][1] + ' on line ' \
@@ -25,13 +25,22 @@ def procedure_token(tokens):
         tokens = proc_name_token(tokens)
     if tokens[0][0] == 'PARAMETER':
         tokens = parameter_token(tokens)
-    if tokens[0][0] == 'DECLARATION'
-        tokens = declaration_token(tokens)
+    if tokens[0][0] == 'DECLARATION':
+
+        # tokens = declaration_token(tokens)
+
+        tokens = pop(tokens)
     else:
         print 'Unknown token: ' + tokens[0][1] + ' on line ' \
             + str(tokens[0][2])
         exit(0)
-    while tokens[0][0] == "EXITLOOP" or tokens[0][0] == "EXITLOOP" or tokens[0][0] == "EXITLOOP" or tokens[0][0] == "EXITLOOP"
+    while tokens[0][0] != 'END':
+        print tokens[0]
+        # tokens = control_flow_token(tokens)
+        tokens = pop(tokens)
+    if tokens[0][0] == "END":
+        tokens = end_token(tokens)
+    return tokens
 
 
 def program_token(tokens):
@@ -42,7 +51,7 @@ def program_token(tokens):
         tokens = main_token(tokens)
     if tokens[0][0] == 'END':
         tokens = end_token(tokens)
-        return code
+        return tokens
     else:
         print 'Unknown token: ' + tokens[0][1] + ' on line ' \
             + str(tokens[0][2])
@@ -54,18 +63,45 @@ def end_token(tokens):
 
 
 def parameter_token(tokens):
+    tokens = pop(tokens)
     while tokens[0][0] == 'IDENTIFIER':
-        tokens = pvar_token(pop(tokens))
-
-
-def pvar_token(tokens):
-    if tokens[0][0] == 'INTEGER':
-        tokens = pop(tokens)
-    elif tokens[0][0] == 'String':
-        tokens = pop(tokens)
+        tokens = pvar_token(tokens)
+    if tokens[0][0] == 'END':
+        tokens = end_token(tokens)
     else:
         print 'Unknown token: ' + tokens[0][1] + ' on line ' \
             + str(tokens[0][2])
+        exit(0)
+    return tokens
+
+
+def pvar_token(tokens):
+    tokens = identifier_token(tokens)
+    if tokens[0][0] == 'INTEGER':
+        tokens = pop(tokens)
+        if tokens[0][0] == 'IN':
+            tokens = pop(tokens)
+        if tokens[0][0] == 'OUT':
+            tokens = pop(tokens)
+        if tokens[0][0] == 'INOUT':
+            tokens = pop(tokens)
+    elif tokens[0][0] == 'STRING':
+        tokens = pop(tokens)
+        if tokens[0][0] == 'IN':
+            tokens = pop(tokens)
+        if tokens[0][0] == 'OUT':
+            tokens = pop(tokens)
+        if tokens[0][0] == 'INOUT':
+            tokens = pop(tokens)
+    else:
+        print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
+    return tokens
+
+
+def proc_name_token(tokens):
+    tokens = identifier_token(tokens)
+    return tokens
 
 
 # def integer_token(tokens):
@@ -95,11 +131,7 @@ def pvar_token(tokens):
 # def digit_token(tokens):
 
 def identifier_token(tokens):
-    if tokens[0][0] == 'IDENTIFIER':
-        return pop(tokens)
-    else:
-        print 'Unknown token: ' + tokens[0][1] + ' on line ' \
-            + str(tokens[0][2])
+    return pop(tokens)
 
 
 def syntax_analyze(tokens):

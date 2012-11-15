@@ -63,7 +63,7 @@ def lexical_analyze(file_input):
 
     file_input = str(file_input.replace('\t', ''))
     file_input = file_input.splitlines()
-    codeline=1
+    codeline = 1
     for line in file_input:
         line = line.strip()
         (tokenline, remainder) = scanner.scan(line)
@@ -72,9 +72,9 @@ def lexical_analyze(file_input):
             print 'Unknown sequence in line: ' + line
             exit(0)
         for token in tokenline:
-            token+=(codeline,)
+            token += (codeline,)
             tokens.append(token)
-        codeline+=1
+        codeline += 1
     # for token in tokens:
     #  print token
 
