@@ -13,16 +13,24 @@ def main_token(tokens):
 
 def procedure_token(tokens):
     print tokens[0]
+    if tokens[0][0] == 'IDENTIFIER':
+        tokens = identifier_token(pop(tokens))
+        return tokens
+    else:
+        print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
+        exit(0)
 
 
 def program_token(tokens):
-    print tokens[0]
-    if tokens[0][0] == 'PROCEDURE':
-        procedure_token(pop(tokens))
-    elif tokens[0][0] == 'MAIN':
+    while tokens[0][0] == 'PROCEDURE':
+        tokens = procedure_token(pop(tokens))
+    if tokens[0][0] == 'MAIN':
         main_token(pop(tokens))
     else:
-        print 'Unknown token: ' + tokens[0][0]
+        print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
+        exit(0)
 
 
 # def end_token(tokens):
@@ -52,13 +60,21 @@ def program_token(tokens):
 # def greater_token(tokens):
 # def constant_token(tokens):
 # def digit_token(tokens):
-# def identifier_token(tokens):
+
+def identifier_token(tokens):
+    if tokens[0][0] == 'IDENTIFIER':
+        return pop(tokens)
+    else:
+        print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
+
 
 def syntax_analyze(tokens):
     code = ''
     if tokens[0][0] == 'PROGRAM':
         program_token(pop(tokens))
     else:
-        print 'Unknown token: ' + tokens[0][1]
+        print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
 
     return code
