@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+code = ''
+
 
 def pop(tokens):
     tokens.pop(0)
@@ -8,33 +10,64 @@ def pop(tokens):
 
 
 def main_token(tokens):
-    print tokens[0]
+    tokens = pop(tokens)
+    if tokens[0][0] == 'Identifier':
+        tokens = proc_name_token(tokens)
+    else:
+        print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
+        exit(0)
 
 
 def procedure_token(tokens):
-    print tokens[0]
+    tokens = pop(tokens)
     if tokens[0][0] == 'IDENTIFIER':
-        tokens = identifier_token(pop(tokens))
-        return tokens
+        tokens = proc_name_token(tokens)
+    if tokens[0][0] == 'PARAMETER':
+        tokens = parameter_token(tokens)
+    if tokens[0][0] == 'DECLARATION'
+        tokens = declaration_token(tokens)
     else:
         print 'Unknown token: ' + tokens[0][1] + ' on line ' \
             + str(tokens[0][2])
         exit(0)
+    while tokens[0][0] == "EXITLOOP" or tokens[0][0] == "EXITLOOP" or tokens[0][0] == "EXITLOOP" or tokens[0][0] == "EXITLOOP"
 
 
 def program_token(tokens):
+    tokens = pop(tokens)
     while tokens[0][0] == 'PROCEDURE':
-        tokens = procedure_token(pop(tokens))
+        tokens = procedure_token(tokens)
     if tokens[0][0] == 'MAIN':
-        main_token(pop(tokens))
+        tokens = main_token(tokens)
+    if tokens[0][0] == 'END':
+        tokens = end_token(tokens)
+        return code
     else:
         print 'Unknown token: ' + tokens[0][1] + ' on line ' \
             + str(tokens[0][2])
         exit(0)
 
 
-# def end_token(tokens):
-# def parameter_token(tokens):
+def end_token(tokens):
+    return pop(tokens)
+
+
+def parameter_token(tokens):
+    while tokens[0][0] == 'IDENTIFIER':
+        tokens = pvar_token(pop(tokens))
+
+
+def pvar_token(tokens):
+    if tokens[0][0] == 'INTEGER':
+        tokens = pop(tokens)
+    elif tokens[0][0] == 'String':
+        tokens = pop(tokens)
+    else:
+        print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
+
+
 # def integer_token(tokens):
 # def string_token(tokens):
 # def input_token(tokens):
@@ -70,9 +103,8 @@ def identifier_token(tokens):
 
 
 def syntax_analyze(tokens):
-    code = ''
     if tokens[0][0] == 'PROGRAM':
-        program_token(pop(tokens))
+        program_token(tokens)
     else:
         print 'Unknown token: ' + tokens[0][1] + ' on line ' \
             + str(tokens[0][2])
