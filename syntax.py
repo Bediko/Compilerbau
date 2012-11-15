@@ -26,20 +26,15 @@ def procedure_token(tokens):
     if tokens[0][0] == 'PARAMETER':
         tokens = parameter_token(tokens)
     if tokens[0][0] == 'DECLARATION':
-
-        # tokens = declaration_token(tokens)
-
-        tokens = pop(tokens)
+        tokens = declaration_token(tokens)
     else:
         print 'Unknown token: ' + tokens[0][1] + ' on line ' \
             + str(tokens[0][2])
         exit(0)
     while tokens[0][0] != 'END':
-        print tokens[0]
-        # tokens = control_flow_token(tokens)
-        tokens = pop(tokens)
-    if tokens[0][0] == "END":
-        tokens = end_token(tokens)
+        tokens = control_flow_token(tokens)
+
+    tokens = end_token(tokens)
     return tokens
 
 
@@ -76,7 +71,7 @@ def parameter_token(tokens):
 
 
 def pvar_token(tokens):
-    tokens = identifier_token(tokens)
+    tokens = var_name_token(tokens)
     if tokens[0][0] == 'INTEGER':
         tokens = pop(tokens)
         if tokens[0][0] == 'IN':
@@ -104,13 +99,13 @@ def proc_name_token(tokens):
     return tokens
 
 
-# def integer_token(tokens):
-# def string_token(tokens):
-# def input_token(tokens):
-# def inout_token(tokens):
-# def in_token(tokens):
-# def out_token(tokens):
+def var_name_token(tokens):
+    tokens = identifier_token(tokens)
+    return tokens
+
+
 # def declaration_token(tokens):
+# def input_token(tokens):
 # def exitloop_token(tokens):
 # def print_token(tokens):
 # def set_token(tokens):
