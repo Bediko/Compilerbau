@@ -7,11 +7,22 @@ def pop(tokens):
     return tokens
 
 
-# def main_token(tokens):
-# def procedure_token(tokens):
+def main_token(tokens):
+    print tokens[0]
+
+
+def procedure_token(tokens):
+    print tokens[0]
+
 
 def program_token(tokens):
     print tokens[0]
+    if tokens[0][0] == 'PROCEDURE':
+        procedure_token(pop(tokens))
+    elif tokens[0][0] == 'MAIN':
+        main_token(pop(tokens))
+    else:
+        print 'Unknown token: ' + tokens[0][0]
 
 
 # def end_token(tokens):
@@ -48,6 +59,6 @@ def syntax_analyze(tokens):
     if tokens[0][0] == 'PROGRAM':
         program_token(pop(tokens))
     else:
-        print "Unknown token: "+tokens[0][1]
+        print 'Unknown token: ' + tokens[0][1]
 
     return code
