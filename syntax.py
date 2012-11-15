@@ -47,5 +47,7 @@ def syntax_analyze(tokens):
     code = ''
     if tokens[0][0] == 'PROGRAM':
         program_token(pop(tokens))
+    else:
+        print "Unknown token: "+tokens[0][1]
 
     return code
