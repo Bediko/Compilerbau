@@ -23,8 +23,14 @@ def procedure_token(tokens):
     tokens = pop(tokens)
     if tokens[0][0] == 'IDENTIFIER':
         tokens = proc_name_token(tokens)
+    else:
+        print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
     if tokens[0][0] == 'PARAMETER':
         tokens = parameter_token(tokens)
+    else:
+        print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
     if tokens[0][0] == 'DECLARATION':
         tokens = declaration_token(tokens)
     else:
@@ -44,13 +50,16 @@ def program_token(tokens):
         tokens = procedure_token(tokens)
     if tokens[0][0] == 'MAIN':
         tokens = main_token(tokens)
+    else:
+        print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
     if tokens[0][0] == 'END':
         tokens = end_token(tokens)
-        return tokens
     else:
         print 'Unknown token: ' + tokens[0][1] + ' on line ' \
             + str(tokens[0][2])
         exit(0)
+    return tokens
 
 
 def end_token(tokens):
@@ -76,18 +85,36 @@ def pvar_token(tokens):
         tokens = pop(tokens)
         if tokens[0][0] == 'IN':
             tokens = pop(tokens)
+        else:
+            print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
         if tokens[0][0] == 'OUT':
             tokens = pop(tokens)
+        else:
+            print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
         if tokens[0][0] == 'INOUT':
             tokens = pop(tokens)
+        else:
+            print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
     elif tokens[0][0] == 'STRING':
         tokens = pop(tokens)
         if tokens[0][0] == 'IN':
             tokens = pop(tokens)
+        else:
+            print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
         if tokens[0][0] == 'OUT':
             tokens = pop(tokens)
+        else:
+            print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
         if tokens[0][0] == 'INOUT':
             tokens = pop(tokens)
+        else:
+            print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
     else:
         print 'Unknown token: ' + tokens[0][1] + ' on line ' \
             + str(tokens[0][2])
@@ -122,6 +149,7 @@ def var_token(tokens):
     else:
         print 'Unknown token: ' + tokens[0][1] + ' on line ' \
             + str(tokens[0][2])
+    return tokens
 
 
 def control_flow_token(tokens):
@@ -136,7 +164,44 @@ def control_flow_token(tokens):
     return tokens
 
 
-# def input_token(tokens):
+def statement_token(tokens):
+    if tokens[0][0] == "PRINT":
+        tokens = print_stmt_token(tokens)
+    elif tokens[0][0] == "INPUT":
+        tokens = input_stmt_token(tokens)
+    elif tokens[0][0] == "SET":
+        tokens = assign_stmt_token(tokens)
+    elif tokens[0][0] == "SUB" or tokens[0][0] == "ADD":
+        tokens == integer_operation_token(tokens)
+    elif tokens[0][0] == "CONCAT":
+        tokens == string_operation_token(tokens)
+    elif tokens[0][0] == "CALL":
+        tokens = call_stmt_token(tokens)
+    else:
+        print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
+    return tokens
+
+
+def print_stmt_token(tokens):
+    tokens = pop(tokens)
+    if tokens[0][0] == "IDENTIFIER":
+        tokens = local_var_token(tokens)
+    else:
+        print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
+    return tokens
+
+
+def input_stmt_token(tokens):
+    tokens = pop(tokens)
+    if tokens[0][0] == "PROMPT":
+        tokens = pop(tokens)
+    if tokens[0][0] == "IDENTIFIER":
+        tokens = local_var_token(tokens)
+    else:
+        print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
 # def exitloop_token(tokens):
 # def print_token(tokens):
 # def set_token(tokens):
