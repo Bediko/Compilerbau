@@ -104,7 +104,38 @@ def var_name_token(tokens):
     return tokens
 
 
-# def declaration_token(tokens):
+def declaration_token(tokens):
+    tokens = pop(tokens)e
+    while tokens[0][0] != "END":
+        tokens = var_token(tokens)
+    tokens = pop(tokens)
+    return tokens
+
+
+def var_token(tokens):
+    if tokens[0][0] == "IDENTIFIER":
+        tokens = var_name_token(tokens)
+    if tokens[0][0] == "INTEGER":
+        tokens = pop(tokens)
+    elif tokens[0][0] == "STRING":
+        tokens = pop(tokens)
+    else:
+        print 'Unknown token: ' + tokens[0][1] + ' on line ' \
+            + str(tokens[0][2])
+
+
+def control_flow_token(tokens):
+    if tokens[0][0] == 'EXITLOOP':
+        tokens = pop(tokens)
+    elif tokens[0][0] == "LOOP":
+        tokens = loop_token(tokens)
+    elif tokens[0][0] == "CASE":
+        tokens = case_token(tokens)
+    else:
+        tokens = statement_token(tokens)
+    return tokens
+
+
 # def input_token(tokens):
 # def exitloop_token(tokens):
 # def print_token(tokens):
