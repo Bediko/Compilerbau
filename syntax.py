@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 code = ''
+statements=[]
 
 
 def pop(tokens):
@@ -118,7 +119,7 @@ def var_name_token(tokens):
 
 
 def declaration_token(tokens):
-    tokens = pop(tokens)e
+    tokens = pop(tokens)
     while tokens[0][0] != "END":
         tokens = var_token(tokens)
     tokens = pop(tokens)
@@ -134,7 +135,23 @@ def var_token(tokens):
         tokens = pop(tokens)
     else:
         unknown_token(tokens)
-# def exitloop_token(tokens):
+    return tokens
+
+
+def controlflow_token(tokens):
+    if tokens[0][0] == "EXITLOOP":
+        tokens = exitloop_token(tokens)
+    elif tokens[0][0] == "LOOP":
+        tokens = loop_token(tokens)
+    elif tokens[0][0] == "CASE":
+        tokens = case_token(tokens) 
+    else:
+        unknown_token(tokens)
+    return tokens
+
+
+def exitloop_token(tokens):
+    return pop(tokens)
 # def print_token(tokens):
 # def set_token(tokens):
 # def add_token(tokens):
