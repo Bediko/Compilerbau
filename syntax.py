@@ -214,7 +214,10 @@ def assign_stmt_token(tokens):
     return tokens
 
 
-# def sub_token(tokens):
+def local_var_token(tokens):
+    tokens = identifier_token(tokens)
+    return tokens
+
 # def conctat_token(tokens):
 # def call_token(tokens):
 # def langle_token(tokens):
