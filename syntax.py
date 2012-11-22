@@ -263,6 +263,11 @@ def integer_operator_token(tokens):
     else:
         unknown_token(tokens)
     return tokens
+
+
+def string_oprator_token(tokens):
+    tokens = pop(tokens)
+    return tokens
 # def rangle_token(tokens):
 # def loop_token(tokens):
 # def case_token(tokens):
