@@ -268,6 +268,10 @@ def integer_operator_token(tokens):
 def string_oprator_token(tokens):
     tokens = pop(tokens)
     return tokens
+
+def result_var_token(tokens):
+    tokens = identifier_token(tokens)
+    return tokens
 # def rangle_token(tokens):
 # def loop_token(tokens):
 # def case_token(tokens):
