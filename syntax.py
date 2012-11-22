@@ -235,7 +235,24 @@ def integer_operation_token(tokens):
         tokens = operand_token(tokens) 
     else:
         unknown_token(tokens)
-# def call_token(tokens):
+    return tokens
+
+
+def string_operation_token(tokens):
+    tokens = pop(tokens)
+    if tokens[0][0] == "IDENTIFIER":
+        tokens = result_var_token(tokens)
+    else:
+        unknown_token(tokens)
+    if tokens[0][0] in operand:
+        tokens = operand_token(tokens)
+    else:
+        unknown_token(tokens)
+    if tokens[0][0] in operand:
+        tokens = operand_token(tokens) 
+    else:
+        unknown_token(tokens)
+    return tokens
 # def langle_token(tokens):
 # def rangle_token(tokens):
 # def loop_token(tokens):
