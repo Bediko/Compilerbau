@@ -269,11 +269,38 @@ def string_oprator_token(tokens):
     tokens = pop(tokens)
     return tokens
 
+
 def result_var_token(tokens):
     tokens = identifier_token(tokens)
     return tokens
-# def rangle_token(tokens):
-# def loop_token(tokens):
+
+
+def call_stmt_token(tokens):
+    tokens = pop(tokens)
+    if token[0][0] == "IDENTIFIER":
+        tokens = identifier_token(tokens)
+    else:
+        unknown_token(tokens)
+    if token[0][0] == "(":
+        tokens = pop(tokens)
+    else:
+        unknown_token(tokens)
+    while tokens[0][0] != ")":
+        tokens = actualparameter_token(tokens)
+    tokens = pop(tokens)
+    return tokens
+
+def actualparameter_token(tokens):
+    tokens = local_var_token(tokens)
+    return tokens
+
+
+def loop_token(tokens):
+    tokens = pop(tokens)
+    while tokens[0][0] != "END":
+        tokens = controlflow_token(tokens)
+    tokens = pop(tokens)
+    return tokens
 # def case_token(tokens):
 # def when_token(tokens):
 # def otherwise_token(tokens):
