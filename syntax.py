@@ -45,8 +45,11 @@ def procedure_token(tokens):
 
 def program_token(tokens):
     tokens = pop(tokens)
-    while tokens[0][0] == 'PROCEDURE':
-        tokens = procedure_token(tokens)
+    while True:
+        if tokens[0][0] != "PROCEDURE":
+            break
+        else:
+            tokens = procedure_token(tokens)
     if tokens[0][0] == 'MAIN':
         tokens = main_token(tokens)
     else:
@@ -290,6 +293,7 @@ def call_stmt_token(tokens):
     tokens = pop(tokens)
     return tokens
 
+
 def actualparameter_token(tokens):
     tokens = local_var_token(tokens)
     return tokens
@@ -301,7 +305,24 @@ def loop_token(tokens):
         tokens = controlflow_token(tokens)
     tokens = pop(tokens)
     return tokens
-# def case_token(tokens):
+
+
+def case_token(tokens):
+    tokens = pop(tokens)
+    while True:
+        if tokens[0][0] != "WHEN":
+            break
+        else:
+            tokens = when_token(tokens)
+    if tokens[0][0] == "OTHERWISE":
+        tokens = otherwise_token(tokens)
+    if tokens[0][0] == "END":
+        tokens = pop(tokens)
+    else:
+        unknown_token(tokens)
+    return tokens
+
+
 # def when_token(tokens):
 # def otherwise_token(tokens):
 # def less_token(tokens):
