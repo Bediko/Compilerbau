@@ -3,6 +3,8 @@
 
 code = ''
 statements = ["PRINT", "INPUT", "SET", "ADD", "SUB", "CONCAT", "CALL"]
+operands = ["CONSTANT", "IDENTIFIER"]
+integer_operators = ["ADD", "SUB"]
 
 
 def pop(tokens):
@@ -159,7 +161,7 @@ def statement_token(tokens):
         tokens = input_stmt_token(tokens)
     elif tokens[0][0] == "SET":
         tokens = assign_stmt_token(tokens)
-    elif tokens[0][0] == "ADD" or tokens[0][0] == "SUB":
+    elif tokens[0][0] in integer_operators:
         tokens = integer_operation_token(tokens)
     elif tokens[0][0] == "CONCAT":
         tokens = string_operation_token(tokens)
@@ -207,7 +209,7 @@ def assign_stmt_token(tokens):
         tokens = result_var_token(tokens)
     else:
         unknown_token(tokens)
-    if tokens[0][0] == "IDENTIFIER" or tokens[0][0] == "CONSTANT":
+    if tokens[0][0] in operators:
         tokens = operand_token(tokens)
     else:
         unknown_token(tokens)
@@ -218,7 +220,21 @@ def local_var_token(tokens):
     tokens = identifier_token(tokens)
     return tokens
 
-# def conctat_token(tokens):
+
+def integer_operation_token(tokens):
+    tokens = integer_operator_token(tokens)
+    if tokens[0][0] == "IDENTIFIER":
+        tokens = result_var_token(tokens)
+    else:
+        unknown_token(tokens)
+    if tokens[0][0] in operand:
+        tokens = operand_token(tokens)
+    else:
+        unknown_token(tokens)
+    if tokens[0][0] in operand:
+        tokens = operand_token(tokens) 
+    else:
+        unknown_token(tokens)
 # def call_token(tokens):
 # def langle_token(tokens):
 # def rangle_token(tokens):
