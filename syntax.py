@@ -174,8 +174,33 @@ def exitloop_token(tokens):
     return pop(tokens)
 
 
-#def print_token(tokens):
-# def set_token(tokens):
+def print_stmt_token(tokens):
+    tokens = pop(tokens)
+    if tokens[0][0] == "IDENTIFIER":
+        tokens = local_var_token(tokens)
+    else:
+        unknown_token(tokens)
+    return tokens
+
+
+def input_stmt_token(tokens):
+    tokens = pop(tokens)
+    if tokens[0][0] == "CONSTANT":
+        tokens = prompt_token(tokens)
+    else:
+        unknown_token(tokens)
+    if tokens[0][0] == "IDENTIFIER":
+        tokens = local_var_token(tokens)
+    else:
+        unknown_token(tokens)
+    return tokens
+
+
+def prompt_token(tokens):
+    tokens = constant_token(tokens)
+    return tokens
+
+
 # def add_token(tokens):
 # def sub_token(tokens):
 # def conctat_token(tokens):
