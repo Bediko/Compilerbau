@@ -6,6 +6,7 @@ statements = ["PRINT", "INPUT", "SET", "ADD", "SUB", "CONCAT", "CALL"]
 operands = ["CONSTANT", "IDENTIFIER"]
 integer_operators = ["ADD", "SUB"]
 log_operators = ["LESS", "GREATER", "EQUAL"]
+controlflows = ["EXITLOOP", "LOOP", "CASE", "PRINT", "INPUT", "SET", "ADD", "SUB", "CONCAT", "CALL"]
 
 
 def pop(tokens):
@@ -38,7 +39,7 @@ def procedure_token(tokens):
         unknown_token(tokens)
         exit(0)
     while tokens[0][0] != 'END':
-        tokens = control_flow_token(tokens)
+        tokens = controlflow_token(tokens)
 
     tokens = end_token(tokens)
     return tokens
@@ -326,9 +327,39 @@ def case_token(tokens):
 
 def when_token(tokens):
     tokens = pop(tokens)
-    
+    if tokens[0][0] in log_operators:
+        tokens = expression_token(tokens)
+    else:
+        unknown_token(tokens)
+    return tokens
+    while tokens[0][0] in controlflows:
+        tokens = controlflow_token(tokens)
+    return tokens
 
-# def otherwise_token(tokens):
+
+def otherwise_token(tokens):
+    tokens = pop(tokens)
+    while tokens in controlflows:
+        tokens = controlflow_token(tokens)
+    return tokens
+
+
+def expression_token(tokens):
+    if tokens in log_operators:
+        tokens = log_operator_token(tokens)
+    else:
+        unknown_token(tokens)
+    if tokens[0][0] == "IDENTIFIER":
+        tokens = operand_token(tokens)
+    else:
+        unknown_token(tokens)
+    if tokens[0][0] == "IDENTIFIER":
+        tokens = operand_token(tokens)
+    else:
+        unknown_token(tokens)
+    return tokens
+
+
 # def less_token(tokens):
 # def equal_token(tokens):
 # def greater_token(tokens):
