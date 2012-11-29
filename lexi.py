@@ -51,7 +51,7 @@ scanner = re.Scanner([
     (r"equal\b", tokenizer),
     (r"greater\b", tokenizer),
     (r'["].*["]', constant),
-    (r"[0-9]+", digit),
+    (r"[0-9]+", constant),
     (r"[A-Za-z][A-Za-z0-9]+", identifier),
     (r"\s", None),
     ])

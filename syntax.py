@@ -14,13 +14,31 @@ def pop(tokens):
     return tokens
 
 
+def program_token(tokens):
+    tokens = pop(tokens)
+    while True:
+        if tokens[0][0] != "PROCEDURE":
+            break
+        else:
+            tokens = procedure_token(tokens)
+    if tokens[0][0] == 'MAIN':
+        tokens = main_token(tokens)
+    else:
+        unknown_token(tokens)
+    if tokens[0][0] == 'END':
+        tokens = pop(tokens)
+    else:
+        unknown_token(tokens)
+    return tokens
+
+
 def main_token(tokens):
     tokens = pop(tokens)
     if tokens[0][0] == 'IDENTIFIER':
         tokens = proc_name_token(tokens)
     else:
         unknown_token(tokens)
-        exit(0)
+    return tokens
 
 
 def procedure_token(tokens):
@@ -37,35 +55,18 @@ def procedure_token(tokens):
         tokens = declaration_token(tokens)
     else:
         unknown_token(tokens)
-        exit(0)
-    while tokens[0][0] != 'END':
+    while tokens[0][0] in controlflows:
         tokens = controlflow_token(tokens)
-
-    tokens = end_token(tokens)
+    if tokens[0][0] == "END":
+        tokens = pop(tokens)
+    else:
+        unknown_token(tokens)
     return tokens
 
 
-def program_token(tokens):
-    tokens = pop(tokens)
-    while True:
-        if tokens[0][0] != "PROCEDURE":
-            break
-        else:
-            tokens = procedure_token(tokens)
-    if tokens[0][0] == 'MAIN':
-        tokens = main_token(tokens)
-    else:
-        unknown_token(tokens)
-    if tokens[0][0] == 'END':
-        tokens = end_token(tokens)
-    else:
-        unknown_token(tokens)
-        exit(0)
+def proc_name_token(tokens):
+    tokens = identifier_token(tokens)
     return tokens
-
-
-def end_token(tokens):
-    return pop(tokens)
 
 
 def parameter_token(tokens):
@@ -73,10 +74,9 @@ def parameter_token(tokens):
     while tokens[0][0] == 'IDENTIFIER':
         tokens = pvar_token(tokens)
     if tokens[0][0] == 'END':
-        tokens = end_token(tokens)
+        tokens = pop(tokens)
     else:
         unknown_token(tokens)
-        exit(0)
     return tokens
 
 
@@ -86,13 +86,9 @@ def pvar_token(tokens):
         tokens = pop(tokens)
         if tokens[0][0] == 'IN':
             tokens = pop(tokens)
-        else:
-            unknown_token(tokens)
-        if tokens[0][0] == 'OUT':
+        elif tokens[0][0] == 'OUT':
             tokens = pop(tokens)
-        else:
-            unknown_token(tokens)
-        if tokens[0][0] == 'INOUT':
+        elif tokens[0][0] == 'INOUT':
             tokens = pop(tokens)
         else:
             unknown_token(tokens)
@@ -100,23 +96,14 @@ def pvar_token(tokens):
         tokens = pop(tokens)
         if tokens[0][0] == 'IN':
             tokens = pop(tokens)
-        else:
-            unknown_token(tokens)
-        if tokens[0][0] == 'OUT':
+        elif tokens[0][0] == 'OUT':
             tokens = pop(tokens)
-        else:
-            unknown_token(tokens)
-        if tokens[0][0] == 'INOUT':
+        elif tokens[0][0] == 'INOUT':
             tokens = pop(tokens)
         else:
             unknown_token(tokens)
     else:
         unknown_token(tokens)
-    return tokens
-
-
-def proc_name_token(tokens):
-    tokens = identifier_token(tokens)
     return tokens
 
 
@@ -147,7 +134,7 @@ def var_token(tokens):
 
 def controlflow_token(tokens):
     if tokens[0][0] == "EXITLOOP":
-        tokens = exitloop_token(tokens)
+        tokens = pop(tokens)
     elif tokens[0][0] == "LOOP":
         tokens = loop_token(tokens)
     elif tokens[0][0] == "CASE":
@@ -177,13 +164,9 @@ def statement_token(tokens):
     return tokens
 
 
-def exitloop_token(tokens):
-    return pop(tokens)
-
-
 def print_stmt_token(tokens):
     tokens = pop(tokens)
-    if tokens[0][0] == "IDENTIFIER":
+    if tokens[0][0] in operands:
         tokens = local_var_token(tokens)
     else:
         unknown_token(tokens)
@@ -214,7 +197,7 @@ def assign_stmt_token(tokens):
         tokens = result_var_token(tokens)
     else:
         unknown_token(tokens)
-    if tokens[0][0] in operators:
+    if tokens[0][0] in operands:
         tokens = operand_token(tokens)
     else:
         unknown_token(tokens)
@@ -222,7 +205,12 @@ def assign_stmt_token(tokens):
 
 
 def local_var_token(tokens):
-    tokens = identifier_token(tokens)
+    if tokens[0][0] == "IDENTIFIER":
+        tokens = identifier_token(tokens)
+    elif tokens[0][0] == "CONSTANT":
+        tokens = constant_token(tokens)
+    else:
+        unknown_token(tokens)
     return tokens
 
 
@@ -232,12 +220,12 @@ def integer_operation_token(tokens):
         tokens = result_var_token(tokens)
     else:
         unknown_token(tokens)
-    if tokens[0][0] in operand:
-        tokens = operand_token(tokens)
+    if tokens[0][0] in operands:
+        tokens = operand1_token(tokens)
     else:
         unknown_token(tokens)
-    if tokens[0][0] in operand:
-        tokens = operand_token(tokens) 
+    if tokens[0][0] in operands:
+        tokens = operand2_token(tokens)
     else:
         unknown_token(tokens)
     return tokens
@@ -249,12 +237,12 @@ def string_operation_token(tokens):
         tokens = result_var_token(tokens)
     else:
         unknown_token(tokens)
-    if tokens[0][0] in operand:
-        tokens = operand_token(tokens)
+    if tokens[0][0] in operands:
+        tokens = operand1_token(tokens)
     else:
         unknown_token(tokens)
-    if tokens[0][0] in operand:
-        tokens = operand_token(tokens) 
+    if tokens[0][0] in operands:
+        tokens = operand2_token(tokens)
     else:
         unknown_token(tokens)
     return tokens
@@ -270,7 +258,7 @@ def integer_operator_token(tokens):
     return tokens
 
 
-def string_oprator_token(tokens):
+def string_operator_token(tokens):
     tokens = pop(tokens)
     return tokens
 
@@ -331,7 +319,6 @@ def when_token(tokens):
         tokens = expression_token(tokens)
     else:
         unknown_token(tokens)
-    return tokens
     while tokens[0][0] in controlflows:
         tokens = controlflow_token(tokens)
     return tokens
@@ -345,16 +332,16 @@ def otherwise_token(tokens):
 
 
 def expression_token(tokens):
-    if tokens in log_operators:
+    if tokens[0][0] in log_operators:
         tokens = log_operator_token(tokens)
     else:
         unknown_token(tokens)
-    if tokens[0][0] == "IDENTIFIER":
-        tokens = operand_token(tokens)
+    if tokens[0][0] in operands:
+        tokens = operand1_token(tokens)
     else:
         unknown_token(tokens)
-    if tokens[0][0] == "IDENTIFIER":
-        tokens = operand_token(tokens)
+    if tokens[0][0] in operands:
+        tokens = operand2_token(tokens)
     else:
         unknown_token(tokens)
     return tokens
@@ -369,13 +356,31 @@ def log_operator_token(tokens):
         tokens = pop(tokens)
     else:
         unknown_token(tokens)
+    return tokens
 
 
-# def less_token(tokens):
-# def equal_token(tokens):
-# def greater_token(tokens):
-# def constant_token(tokens):
-# def digit_token(tokens):
+def operand1_token(tokens):
+    tokens = operand_token(tokens)
+    return tokens
+
+
+def operand2_token(tokens):
+    tokens = operand_token(tokens)
+    return tokens
+
+
+def operand_token(tokens):
+    if tokens[0][0] == "IDENTIFIER":
+        tokens = identifier_token(tokens)
+    elif tokens[0][0] == "CONSTANT":
+        tokens = constant_token(tokens)
+    else:
+        unknown_token(tokens)
+    return tokens
+
+
+def constant_token(tokens):
+    return pop(tokens)
 
 
 def identifier_token(tokens):
