@@ -360,6 +360,17 @@ def expression_token(tokens):
     return tokens
 
 
+def log_operator_token(tokens):
+    if tokens[0][0] == "LESS":
+        tokens = pop(tokens)
+    elif tokens[0][0] == "EQUAL":
+        tokens = pop(tokens)
+    elif tokens[0][0] == "GREATER":
+        tokens = pop(tokens)
+    else:
+        unknown_token(tokens)
+
+
 # def less_token(tokens):
 # def equal_token(tokens):
 # def greater_token(tokens):
