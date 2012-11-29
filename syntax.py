@@ -5,6 +5,7 @@ code = ''
 statements = ["PRINT", "INPUT", "SET", "ADD", "SUB", "CONCAT", "CALL"]
 operands = ["CONSTANT", "IDENTIFIER"]
 integer_operators = ["ADD", "SUB"]
+log_operators = ["LESS", "GREATER", "EQUAL"]
 
 
 def pop(tokens):
@@ -280,11 +281,11 @@ def result_var_token(tokens):
 
 def call_stmt_token(tokens):
     tokens = pop(tokens)
-    if token[0][0] == "IDENTIFIER":
+    if tokens[0][0] == "IDENTIFIER":
         tokens = identifier_token(tokens)
     else:
         unknown_token(tokens)
-    if token[0][0] == "(":
+    if tokens[0][0] == "(":
         tokens = pop(tokens)
     else:
         unknown_token(tokens)
@@ -323,7 +324,10 @@ def case_token(tokens):
     return tokens
 
 
-# def when_token(tokens):
+def when_token(tokens):
+    tokens = pop(tokens)
+    
+
 # def otherwise_token(tokens):
 # def less_token(tokens):
 # def equal_token(tokens):
