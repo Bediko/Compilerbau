@@ -69,14 +69,14 @@ def lexical_analyze(file_input):
         (tokenline, remainder) = scanner.scan(line)
 
         if remainder != '':
-            print 'Unknown sequence in line: ' + line
+            print ('Unknown sequence in line: ' + line)
             exit(0)
         for token in tokenline:
             token += (codeline,)
             tokens.append(token)
         codeline += 1
-    # for token in tokens:
-    #  print token
+#    for token in tokens:
+#        print token#
 
-    # print remainders
+#        print remainders
     return tokens
