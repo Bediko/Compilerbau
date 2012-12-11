@@ -18,6 +18,7 @@ def pop(tokens):
 def program_token(tokens, parent):
     child = T.Tree("program")
     parent.addChild(child)
+    parent = child
     tokens = pop(tokens)
     while True:
         if tokens[0][0] != "PROCEDURE":
@@ -34,7 +35,7 @@ def program_token(tokens, parent):
         tokens = pop(tokens)
     else:
         unknown_token(tokens)
-    return tokens, parent
+    return tokens
 
 
 def main_token(tokens, parent):
@@ -52,6 +53,7 @@ def procedure_token(tokens, parent):
     tokens = pop(tokens)
     child = T.Tree("procedure")
     parent.addChild(child)
+    parent = child
     if tokens[0][0] == 'IDENTIFIER':
         tokens = proc_name_token(tokens, child)
     else:
@@ -86,6 +88,7 @@ def parameter_token(tokens, parent):
     tokens = pop(tokens)
     child = T.Tree("parameter")
     parent.addChild(child)
+    parent = child
     while tokens[0][0] == 'IDENTIFIER':
         tokens = pvar_token(tokens, child)
     if tokens[0][0] == 'END':
@@ -104,6 +107,7 @@ def pvar_token(tokens, parent):
     if tokens[0][0] == 'INTEGER':
         child = T.Tree("integer")
         parent.addChild(child)
+        parent = child
         tokens = pop(tokens)
         if tokens[0][0] == 'IN':
             child = T.Tree("in")
@@ -122,6 +126,7 @@ def pvar_token(tokens, parent):
     elif tokens[0][0] == 'STRING':
         child = T.Tree("string")
         parent.addChild(child)
+        parent = child
         tokens = pop(tokens)
         if tokens[0][0] == 'IN':
             child = T.Tree("in")
@@ -153,6 +158,7 @@ def declaration_token(tokens, parent):
     tokens = pop(tokens)
     child = T.Tree("declaration")
     parent.addChild(child)
+    parent = child
     while tokens[0][0] != "END":
         tokens = var_token(tokens, child)
     tokens = pop(tokens)
@@ -164,6 +170,7 @@ def declaration_token(tokens, parent):
 def var_token(tokens, parent):
     child = T.Tree("var")
     parent.addChild(child)
+    parent = child
     if tokens[0][0] == "IDENTIFIER":
         tokens = var_name_token(tokens, child)
     if tokens[0][0] == "INTEGER":
@@ -182,6 +189,7 @@ def var_token(tokens, parent):
 def controlflow_token(tokens, parent):
     child = T.Tree("controlflow")
     parent.addChild(child)
+    parent = child
     if tokens[0][0] == "EXITLOOP":
         child = T.Tree("exitloop")
         parent.addChild(child)
@@ -318,6 +326,7 @@ def string_operation_token(tokens, parent):
 def integer_operator_token(tokens, parent):
     child = T.Tree("integeroperator")
     parent.addChild(child)
+    parent = child
     if tokens[0][0] == "ADD":
         child = T.Tree("add")
         parent.addChild(child)
@@ -334,6 +343,7 @@ def integer_operator_token(tokens, parent):
 def string_operator_token(tokens, parent):
     child = T.Tree("string_operator")
     parent.addChild(child)
+    parent = child
     child = T.Tree("concat")
     parent.addChild(child)
     tokens = pop(tokens)
@@ -375,6 +385,7 @@ def actualparameter_token(tokens, parent):
 def loop_token(tokens, parent):
     child = T.Tree("loop")
     parent.addChild(child)
+    parent = child
     tokens = pop(tokens)
     while tokens[0][0] != "END":
         tokens = controlflow_token(tokens, child)
@@ -387,6 +398,7 @@ def loop_token(tokens, parent):
 def case_token(tokens, parent):
     child = T.Tree("case")
     parent.addChild(child)
+    parent = child
     tokens = pop(tokens)
     while True:
         if tokens[0][0] != "WHEN":
@@ -447,6 +459,7 @@ def expression_token(tokens, parent):
 def log_operator_token(tokens, parent):
     child = T.Tree("logoperator")
     parent.addChild(child)
+    parent = child
     if tokens[0][0] == "LESS":
         child = T.Tree("less")
         parent.addChild(child)
@@ -512,7 +525,7 @@ def syntax_analyze(tokens):
 
     if tokens[0][0] == 'PROGRAM':
         syntree = T.Tree('root')
-        tokens, syntree = program_token(tokens, syntree)
+        tokens = program_token(tokens, syntree)
     else:
         unknown_token(tokens)
     syntree.prettyTree()
