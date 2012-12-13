@@ -8,6 +8,7 @@ operands = ["CONSTANT", "IDENTIFIER"]
 integer_operators = ["ADD", "SUB"]
 log_operators = ["LESS", "GREATER", "EQUAL"]
 controlflows = ["EXITLOOP", "LOOP", "CASE", "PRINT", "INPUT", "SET", "ADD", "SUB", "CONCAT", "CALL"]
+symboltable = []
 
 
 def pop(tokens):
@@ -42,6 +43,7 @@ def main_token(tokens, parent):
     tokens = pop(tokens)
     child = T.Tree("main")
     parent.addChild(child)
+    symboltable.append({"type": "main", "scope": "global", "name": tokens[0][1]})
     if tokens[0][0] == 'IDENTIFIER':
         tokens = proc_name_token(tokens, child)
     else:
@@ -54,16 +56,19 @@ def procedure_token(tokens, parent):
     child = T.Tree("procedure")
     parent.addChild(child)
     parent = child
+    scope = ""
+    symboltable.append({"type": "procedure", "scope": "global", "name": tokens[0][1]})
     if tokens[0][0] == 'IDENTIFIER':
+        scope = tokens[0][1]
         tokens = proc_name_token(tokens, child)
     else:
         unknown_token(tokens)
     if tokens[0][0] == 'PARAMETER':
-        tokens = parameter_token(tokens, child)
+        tokens = parameter_token(tokens, child, scope)
     else:
         unknown_token(tokens)
     if tokens[0][0] == 'DECLARATION':
-        tokens = declaration_token(tokens, child)
+        tokens = declaration_token(tokens, child, scope)
     else:
         unknown_token(tokens)
     while tokens[0][0] in controlflows:
@@ -84,12 +89,13 @@ def proc_name_token(tokens, parent):
     return tokens
 
 
-def parameter_token(tokens, parent):
+def parameter_token(tokens, parent, scope):
     tokens = pop(tokens)
     child = T.Tree("parameter")
     parent.addChild(child)
     parent = child
     while tokens[0][0] == 'IDENTIFIER':
+        symboltable.append({"type": tokens[1][0], "scope": scope, "name": tokens[0][1]})
         tokens = pvar_token(tokens, child)
     if tokens[0][0] == 'END':
         child = T.Tree("end")
@@ -154,12 +160,13 @@ def var_name_token(tokens, parent):
     return tokens
 
 
-def declaration_token(tokens, parent):
+def declaration_token(tokens, parent, scope):
     tokens = pop(tokens)
     child = T.Tree("declaration")
     parent.addChild(child)
     parent = child
     while tokens[0][0] != "END":
+        symboltable.append({"type": tokens[1][0], "scope": scope, "name": tokens[0][1]})
         tokens = var_token(tokens, child)
     tokens = pop(tokens)
     child = T.Tree("end")
@@ -506,11 +513,17 @@ def operand_token(tokens, parent):
 def constant_token(tokens, parent):
     child = T.Tree("constant")
     parent.addChild(child)
+    parent = child
+    child = T.Tree(tokens[0][1])
+    parent.addChild(child)
     return pop(tokens)
 
 
 def identifier_token(tokens, parent):
     child = T.Tree("identifier")
+    parent.addChild(child)
+    parent = child
+    child = T.Tree(tokens[0][1])
     parent.addChild(child)
     return pop(tokens)
 
@@ -528,5 +541,4 @@ def syntax_analyze(tokens):
         tokens = program_token(tokens, syntree)
     else:
         unknown_token(tokens)
-    syntree.prettyTree()
-    return syntree
+    return syntree, symboltable
