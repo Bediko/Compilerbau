@@ -59,7 +59,6 @@ scanner = re.Scanner([
 
 def lexical_analyze(file_input):
     tokens = []
-    remainders = ''
 
     file_input = str(file_input.replace('\t', ''))
     file_input = file_input.splitlines()

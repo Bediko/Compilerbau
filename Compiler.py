@@ -4,6 +4,7 @@
 from lexi import lexical_analyze
 from syntax import syntax_analyze
 from semantic import semantic_analyze
+from generation import generate_code
 
 f = open('program')
 file_input = f.read()
@@ -18,3 +19,4 @@ syntree, symboltable = syntax_analyze(tokens)
 print("Syntax done")
 semantic_analyze(syntree, symboltable)
 print("Semantics done")
+code = generate_code(syntree, symboltable)
