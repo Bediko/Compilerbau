@@ -75,8 +75,4 @@ def lexical_analyze(file_input):
             token += (codeline,)
             tokens.append(token)
         codeline += 1
-#    for token in tokens:
-#        print token#
-
-#        print remainders
     return tokens
