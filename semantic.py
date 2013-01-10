@@ -24,9 +24,7 @@ def iterate(st, scope):
         try:
             iterate(st.getChild(i), scope)
         except IndexError:
-            print(st)
             return
-    print(st)
 
 
 def semantic_analyze(syntree, symboltable):
