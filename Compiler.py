@@ -13,7 +13,7 @@ tokens = lexical_analyze(file_input)
 #        print token#
 print("Lexial done")
 syntree, symboltable = syntax_analyze(tokens)
-#syntree.prettyTree()
+syntree.prettyTree()
 #for e in symboltable:
 #    print (e)
 print("Syntax done")
