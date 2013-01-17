@@ -1,3 +1,4 @@
+code=[]
 def traverse_tree(st):
 
     if str(st) == 'program':
@@ -10,7 +11,6 @@ def traverse_tree(st):
         return
     elif str(st) == 'procedure':
         for i in range(len(st.getChildren()) - 1, -1, -1):
-            print (i)
             name = traverse_tree(st.getChild(i))
             if name != None:
                 print(name)
@@ -21,8 +21,6 @@ def traverse_tree(st):
             return name
         return
     elif str(st) == 'parameter':
-        for i in range(len(st.getChildren()) - 1, -1, -1):
-            traverse_tree(st.getChild(i))
         return
     elif str(st) == 'pvar':
         for i in range(len(st.getChildren()) - 1, -1, -1):
@@ -33,8 +31,6 @@ def traverse_tree(st):
             traverse_tree(st.getChild(i))
         return
     elif str(st) == 'declaration':
-        for i in range(len(st.getChildren()) - 1, -1, -1):
-            traverse_tree(st.getChild(i))
         return
     elif str(st) == 'var':
         for i in range(len(st.getChildren()) - 1, -1, -1):
@@ -57,8 +53,7 @@ def traverse_tree(st):
             traverse_tree(st.getChild(i))
         return
     elif str(st) == 'assignstm':
-        for i in range(len(st.getChildren()) - 1, -1, -1):
-            traverse_tree(st.getChild(i))
+        print("assign " + str(st.getChild(1).getChild(0).getChild(0)) + ", " + str(st.getChild(0).getChild(0).getChild(0)))
         return
     elif str(st) == 'localvar':
         for i in range(len(st.getChildren()) - 1, -1, -1):
@@ -93,6 +88,7 @@ def traverse_tree(st):
             traverse_tree(st.getChild(i))
         return
     elif str(st) == 'loop':
+        print("loop")
         for i in range(len(st.getChildren()) - 1, -1, -1):
             traverse_tree(st.getChild(i))
         return
@@ -101,7 +97,9 @@ def traverse_tree(st):
             traverse_tree(st.getChild(i))
         return
     elif str(st) == 'when':
-        for i in range(len(st.getChildren()) - 1, -1, -1):
+        operator = str(st.getChild(len(st.getChildren()) - 1).getChild(2).getChild(0))
+        print(operator)
+        for i in range(len(st.getChildren()) - 2, -1, -1):
             traverse_tree(st.getChild(i))
         return
     elif str(st) == 'otherwise':
@@ -129,10 +127,7 @@ def traverse_tree(st):
             traverse_tree(st.getChild(i))
         return
     elif str(st) == 'identifier':
-        for i in range(len(st.getChildren()) - 1, -1, -1):
-            name = (st.getChild(i))
-            return str(name)
-        return
+        return str(st.getChild(0))
     elif str(st) == 'prompt':
         for i in range(len(st.getChildren()) - 1, -1, -1):
             traverse_tree(st.getChild(i))
